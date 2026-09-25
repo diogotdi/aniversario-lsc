@@ -1,0 +1,13 @@
+# Netlify/Vercel headers
+/project-management/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+
+/project-management/css/*
+  Cache-Control: public, max-age=2592000
+
+/project-management/js/*
+  Cache-Control: public, max-age=2592000
+
+/project-management/icons/*
+  Cache-Control: public, max-age=2592000

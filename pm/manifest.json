@@ -1,0 +1,21 @@
+{
+  "name": "Leixões SC 119.º Aniversário — Gestão de Projeto",
+  "short_name": "Leixões 119 PM",
+  "description": "Ferramenta de gestão de projeto para o 119.º aniversário do Leixões Sport Club",
+  "start_url": "/project-management/",
+  "scope": "/project-management/",
+  "display": "standalone",
+  "background_color": "#C8102E",
+  "theme_color": "#C8102E",
+  "orientation": "any",
+  "lang": "pt-PT",
+  "categories": ["productivity", "utilities"],
+  "icons": [
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

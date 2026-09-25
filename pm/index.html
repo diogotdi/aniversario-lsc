@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Gestão de Projeto — 119.º Aniversário | Leixões Sport Club</title>
+  <meta name="description" content="Ferramenta de gestão de projeto para o 119.º aniversário do Leixões Sport Club — 27 e 28 de novembro de 2026, Antiga Fábrica Vasco da Gama, Matosinhos.">
+  <meta name="theme-color" content="#C8102E">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Leixões 119 PM">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Gestão de Projeto — 119.º Aniversário Leixões SC">
+  <meta property="og:description" content="Planeamento dos dois dias de celebração: memória dos Bebés do Mar, sessão institucional, reconhecimento público e festa.">
+  <meta property="og:url" content="https://aniversario.leixoessc.com/project-management">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_PT">
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon.svg">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<!-- =========== HEADER =========== -->
+<header class="app-header">
+  <div class="logo">Leixões <span>119.º</span></div>
+  <nav class="desktop-nav" style="display:none">
+    <button data-view="dashboard" class="active">📈 Dashboard</button>
+    <button data-view="tasks">📋 Tasks</button>
+    <button data-view="gantt">📊 Gantt</button>
+    <button data-view="calendar">📅 Calendar</button>
+    <button data-view="files">📁 Files</button>
+  </nav>
+  <div class="header-actions">
+    <button class="header-btn" onclick="Theme.toggle()" title="Toggle dark mode">🌓</button>
+    <button class="header-btn" onclick="App.showExportImport()" title="Import / Export">💾</button>
+    <button class="header-btn" onclick="App.showSettings()" title="Settings">⚙️</button>
+  </div>
+</header>
+
+<!-- =========== MAIN VIEWS =========== -->
+<div class="main-content">
+
+  <!-- DASHBOARD VIEW -->
+  <div id="view-dashboard" class="view active">
+    <div class="dashboard" id="dashboardContent"></div>
+  </div>
+
+  <!-- TASK LIST VIEW -->
+  <div id="view-tasks" class="view">
+    <div class="search-bar">
+      <div class="search-wrap">
+        <input type="text" class="search-input" placeholder="Search tasks..." id="taskSearch" oninput="TaskList.onSearch(this.value)">
+      </div>
+    </div>
+    <div class="filter-bar" id="taskFilters"></div>
+    <div class="stats-bar" id="taskStats"></div>
+    <div class="bulk-bar" id="bulkBar"></div>
+    <div class="task-list" id="taskListContainer"></div>
+  </div>
+
+  <!-- GANTT VIEW -->
+  <div id="view-gantt" class="view">
+    <div class="gantt-controls" id="ganttControls"></div>
+    <div class="gantt-container" id="ganttContainer"></div>
+  </div>
+
+  <!-- CALENDAR VIEW -->
+  <div id="view-calendar" class="view">
+    <div class="calendar-header" id="calendarHeader"></div>
+    <div class="calendar-grid" id="calendarGrid"></div>
+  </div>
+
+  <!-- FILES VIEW -->
+  <div id="view-files" class="view">
+    <div class="files-container" id="filesContainer"></div>
+  </div>
+</div>
+
+<!-- =========== FAB =========== -->
+<button class="fab" onclick="TaskModal.open()" title="Add task (N)">+</button>
+
+<!-- =========== BOTTOM NAV =========== -->
+<nav class="bottom-nav">
+  <button class="nav-item active" data-view="dashboard">
+    <span class="nav-icon">📈</span><span>Home</span>
+  </button>
+  <button class="nav-item" data-view="tasks">
+    <span class="nav-icon">📋</span><span>Tasks</span>
+  </button>
+  <button class="nav-item" data-view="gantt">
+    <span class="nav-icon">📊</span><span>Gantt</span>
+  </button>
+  <button class="nav-item" data-view="calendar">
+    <span class="nav-icon">📅</span><span>Calendar</span>
+  </button>
+  <button class="nav-item" data-view="files">
+    <span class="nav-icon">📁</span><span>Files</span>
+    <span class="badge" id="fileBadge" style="display:none">0</span>
+  </button>
+</nav>
+
+<!-- =========== MODAL =========== -->
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)Modal.close()">
+  <div class="modal-panel" id="modalPanel">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <h2 class="modal-title" id="modalTitle">Modal</h2>
+      <button class="modal-close" onclick="Modal.close()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<!-- =========== KEYBOARD SHORTCUTS OVERLAY =========== -->
+<div class="shortcut-overlay" id="shortcutOverlay" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="shortcut-panel">
+    <h3 style="margin-bottom:16px;font-size:1rem">⌨️ Keyboard Shortcuts</h3>
+    <div class="shortcut-row"><span>New task</span><span class="kbd">N</span></div>
+    <div class="shortcut-row"><span>Toggle dark mode</span><span class="kbd">D</span></div>
+    <div class="shortcut-row"><span>Search tasks</span><span><span class="kbd">Ctrl</span>+<span class="kbd">K</span></span></div>
+    <div class="shortcut-row"><span>Dashboard</span><span class="kbd">1</span></div>
+    <div class="shortcut-row"><span>Tasks</span><span class="kbd">2</span></div>
+    <div class="shortcut-row"><span>Gantt</span><span class="kbd">3</span></div>
+    <div class="shortcut-row"><span>Calendar</span><span class="kbd">4</span></div>
+    <div class="shortcut-row"><span>Files</span><span class="kbd">5</span></div>
+    <div class="shortcut-row"><span>Close modal</span><span class="kbd">Esc</span></div>
+    <div class="shortcut-row"><span>This panel</span><span class="kbd">?</span></div>
+    <button class="btn btn-secondary btn-block" style="margin-top:16px" onclick="$('#shortcutOverlay').classList.remove('open')">Close</button>
+  </div>
+</div>
+
+<!-- =========== TOAST CONTAINER =========== -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- =========== APP SCRIPT =========== -->
+<script src="js/app.js"></script>
+
+</body>
+</html>
